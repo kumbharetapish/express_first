@@ -1,0 +1,14 @@
+{
+  "name": "express_first",
+  "version": "1.0.0",
+  "description": "This the first Project of express. ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kumbhare Tapish",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
