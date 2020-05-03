@@ -1,89 +1,34 @@
-const fs = require("fs");
 const express = require("express");
+const morgan = require("morgan");
+const toursRouter = require("./route/toursRoute");
+const UserRouter = require("./route/userRoute");
 const app = express();
+
+if (process.env.NODE_ENV === "developments") {
+  app.use(morgan("dev"));
+}
+
+// ************* Middleware ************** //
 app.use(express.json());
+app.use(express.static(`${__dirname}`));
 
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/data/JSON/tours-simple.json`)
-);
+app.use((req, res, next) => {
+  console.log("log from middlerware");
+  next();
+});
 
-const getAllTours = (req, res) => {
-  res.status(200).json({
-    status: "success",
-    result: tours.length,
-    data: {
-      tours,
-    },
-  });
-};
-const getSingleTours = (req, res) => {
-  const Id = parseInt(req.params.id);
-  const selTours = tours.find((data) => data.id === Id);
-
-  if (!selTours) {
-    res.status(404).json({
-      status: "fail",
-      massage: "Invalid Id",
-    });
-  }
-  res.status(200).json(selTours);
-};
-const createTour = (req, res) => {
-  const newId = tours[tours.length - 1].id + 1;
-  const newObject = Object.assign({ id: newId }, req.body);
-  tours.push(newObject);
-  fs.writeFile(
-    `${__dirname}/data/JSON/tours-simple.json`,
-    JSON.stringify(tours),
-    (err) => {
-      res.status(201).json({
-        status: "success",
-        data: newObject,
-      });
-    }
-  );
-};
-const updateTours = (req, res) => {
-  const Id = parseInt(req.params.id);
-
-  if (Id > tours.length) {
-    res.status(404).json({
-      status: "fail",
-      massage: "Invalid Id",
-    });
-  }
-  res.status(202).json({
-    status: "success",
-    massage: "data is Update",
-  });
-};
-const deleteTour = (req, res) => {
-  const Id = parseInt(req.params.id);
-
-  if (Id > tours.length) {
-    res.status(404).json({
-      status: "fail",
-      massage: "Invalid Id",
-    });
-  }
-  res.status(204).json({
-    status: "Success",
-    data: null,
-  });
-};
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+// *************Router************** //
 // app.get("/api/V0/tours", getAllTours);
 // app.post("/api/V0/tours", createTour);
-app.route("/api/V0/tours").get(getAllTours).post(createTour);
 
 // app.get("/api/V0/tours/:id", getSingleTours);
 // app.patch("/api/V0/tours/:id", updateTours);
 // app.delete("/api/V0/tours/:id", deleteTour);
-app
-  .route("/api/V0/tours/:id")
-  .get(getSingleTours)
-  .patch(updateTours)
-  .delete(deleteTour);
+app.use("/api/V0/tours", toursRouter);
+app.use("/api/V0/users", UserRouter);
 
-app.listen(4500, () => {
-  console.log("Server started on 4500");
-});
+module.exports = app;
