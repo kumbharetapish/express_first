@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static(`${__dirname}`));
 
 app.use((req, res, next) => {
-  console.log("log from middlerware");
+  console.log("log from middleware");
   next();
 });
 
