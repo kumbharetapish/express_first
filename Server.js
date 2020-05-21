@@ -22,20 +22,6 @@ mongoose
     console.log("Database Connection with Server.");
   });
 
-// const testUser = new Model.ModelName({
-//   name: "Ramu V. Kamwala",
-//   price: 3000,
-//   ratting: 3.4,
-// });
-
-// testUser
-//   .save()
-//   .then((data) => {
-//     console.log(data);
-//   })
-//   .catch((err) => {
-//     console.log("error...💥",err.errmsg );
-// });
 
 const port = process.env.port || 8000;
 app.listen(port, () => {

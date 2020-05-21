@@ -21,13 +21,8 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
-// *************Router************** //
-// app.get("/api/V0/tours", getAllTours);
-// app.post("/api/V0/tours", createTour);
 
-// app.get("/api/V0/tours/:id", getSingleTours);
-// app.patch("/api/V0/tours/:id", updateTours);
-// app.delete("/api/V0/tours/:id", deleteTour);
+// *************Router************** //
 app.use("/api/V0/tours", toursRouter);
 app.use("/api/V0/users", UserRouter);
 
